@@ -19,8 +19,9 @@ server.get("/", (req, res) => {
   res.sendStatus(200);
 });
 
-server.use("/api/user", user);
-// server.use("/api/review", review)
+server.use("/api/user", user) 
+server.use("/api/review", review)
+
 // server.use("/api/meetups", meetups)
 
 let serverInstance;
@@ -30,8 +31,10 @@ const startServer = async () => {
     await mongoose.connect(dev_uri, clientOptions);
     console.log("Connected to MongoDb");
 
+
     serverInstance = server.listen(dev_port, () => {
       console.log(`Server running on https://${dev_url}:${dev_port}`);
+
     });
     console.log("serverInstance", serverInstance);
   } catch (error) {
