@@ -22,6 +22,10 @@ const meetupsSchema = new mongoose.Schema({
         type: String, 
         required: true
     },
+    participants: {
+        type: Array,
+        required: false
+    }
 });
 
 const Meetups = mongoose.model("Meetups", meetupsSchema);
