@@ -9,7 +9,7 @@ console.log(dev_url)
 const server = express();
 
 server.use("/api/user", user) 
-// server.use("/api/review", review)
+server.use("/api/review", review)
 // server.use("/api/meetups", meetups)
 
 const startServer = async () => {
@@ -18,7 +18,7 @@ const startServer = async () => {
     console.log("Connected to MongoDb");
 
     server.listen(dev_port, () => {
-        console.log(`Server running on https://${dev_url}:${dev_port}`)
+        console.log(`Server running on http://${dev_url}:${dev_port}`)
     });
   } catch (error) {
     console.log("Failed to connect to MongoDb")

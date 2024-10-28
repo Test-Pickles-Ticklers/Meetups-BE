@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const { dev_secret } = require('../config');
 
-function auth(req, res, next) {
+const auth =(req, res, next) => {
   // Check if Authorization header exists
   const authHeader = req.headers['authorization'];
   if (!authHeader) {
@@ -13,15 +14,14 @@ function auth(req, res, next) {
     return res.status(401).json({ error: 'Token missing' });
   }
 
+  // Verify the token
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const decoded = jwt.verify(token, dev_secret);
     req.user = decoded;
     next();
   } catch (err) {
-    res.status(400).send('Invalid token.');
+    return res.status(403).json({ error: 'Invalid token.' });
   }
 }
 
-module.exports = {
-    auth
-}
+module.exports = auth;
