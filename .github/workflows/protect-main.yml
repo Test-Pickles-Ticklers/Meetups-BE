@@ -14,5 +14,5 @@ jobs:
         run: |
           if [[ "${{ github.base_ref }}" == "main" && "${{ github.head_ref }}" != "dev" ]]; then
             echo "Error: Pull request to 'main' are only allowed from 'dev' branch."
-            ecit 1
+            exit 1
           fi
