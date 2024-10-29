@@ -16,15 +16,15 @@ const { user } = require("./Controllers/UserController");
 console.log(dev_port);
 console.log(dev_url);
 const server = express();
-server.use(cors())//Enable CORS for all routes
+server.use(cors()); //Enable CORS for all routes
 
 server.get("/", (req, res) => {
   res.sendStatus(200);
 });
 
-server.use("/api/user", user) 
-server.use("/api/review", review)
-server.use("/api/meetups", meetup)
+server.use("/api/user", user);
+server.use("/api/review", review);
+server.use("/api/meetups", meetup);
 
 let serverInstance;
 
@@ -33,10 +33,8 @@ const startServer = async () => {
     await mongoose.connect(dev_uri, clientOptions);
     console.log("Connected to MongoDb");
 
-
     serverInstance = server.listen(dev_port, () => {
       console.log(`Server running on https://${dev_url}:${dev_port}`);
-
     });
     console.log("serverInstance", serverInstance);
   } catch (error) {
