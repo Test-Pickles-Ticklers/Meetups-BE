@@ -4,7 +4,6 @@ const meetupsSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        
     },
     organizer: {
         type: String,
@@ -24,7 +23,7 @@ const meetupsSchema = new mongoose.Schema({
     },
     participants: {
         type: Array,
-        required: false
+        required: false,
     }
 });
 
