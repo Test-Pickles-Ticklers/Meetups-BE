@@ -1,3 +1,5 @@
+const cors = require("cors");
+
 const {
   dev_port,
   mongoose,
@@ -14,6 +16,7 @@ const { user } = require("./Controllers/UserController");
 console.log(dev_port);
 console.log(dev_url);
 const server = express();
+server.use(cors())//Enable CORS for all routes
 
 server.get("/", (req, res) => {
   res.sendStatus(200);
