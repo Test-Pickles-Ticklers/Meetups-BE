@@ -26,7 +26,6 @@ const getMeetupById = async (id) => {
     }
 }
 
-
 const addParticipants = async (email, event) => {
     try {
         const meetup = await Meetups.findOneAndUpdate(
