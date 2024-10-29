@@ -12,11 +12,10 @@ const {
 const { meetup } = require("./Controllers/MeetupController");
 const { review } = require("./Controllers/ReviewController");
 const { user } = require("./Controllers/UserController");
-// const { auth } = require('./Utils/auth');
 
-console.log(dev_port);
-console.log(dev_url);
 const server = express();
+
+console.log("origin_url", origin_url);
 
 const corsOptions = {
   origin: origin_url,
@@ -25,7 +24,7 @@ const corsOptions = {
   credentials: true,
 };
 
-server.options("*", cors(corsOptions));
+server.use(cors(corsOptions));
 
 server.get("/", (req, res) => {
   res.sendStatus(200);
@@ -45,7 +44,6 @@ const startServer = async () => {
     serverInstance = server.listen(dev_port, () => {
       console.log(`Server running on https://${dev_url}:${dev_port}`);
     });
-    console.log("serverInstance", serverInstance);
   } catch (error) {
     console.log("Failed to connect to MongoDb");
     console.error(error);
