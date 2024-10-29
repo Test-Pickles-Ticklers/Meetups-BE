@@ -1,3 +1,4 @@
+const { user } = require("../Controllers/UserController")
 const { Meetups } = require("../Model/MeetupsSchema")
 
 const getMeetup = async (event) => {
@@ -26,10 +27,11 @@ const getMeetupById = async (id) => {
     }
 }
 
-const addParticipants = async (email, event) => {
+//might break here sometime
+const addParticipants = async (email, eventId) => {
     try {
-        const meetup = await Meetups.findOneAndUpdate(
-            {title: event}, 
+        const meetup = await Meetups.findByIdAndUpdate(
+            {_id: eventId}, 
             {$push: { participants: email}},
             {new: true}
         )
@@ -42,6 +44,33 @@ const addParticipants = async (email, event) => {
     } catch (error) {
         return { success: false, msg: error}
     }
+}
+
+const cancelMeetupPartake = async (id, user) => {
+    try {
+        console.log("ID IN CANCEL", id)
+        console.log("USER IN CANCEL", user)
+        const participant = user
+        const meetup = await Meetups.findById(id)
+        console.log("MEETUP IN CANCEL", meetup)
+        if(!meetup){
+            return {success: false, msg: "meetup not found"}
+        }
+
+        if(!meetup.participants.includes(participant)){
+            return {success: false, msg: "You are not a participant of this meetup"}
+        }
+
+        const updateMeetup = await Meetups.findByIdAndUpdate(id,
+            {$pull: {participants: participant} },
+            {new: true}
+    );
+
+    return { success: true, data: updateMeetup}
+
+    } catch(error){
+        return { success: false, msg: error.message}
+    } 
 }
 
 const addMeetup = async (title, organizer, date, time, location) => {
@@ -66,4 +95,5 @@ const addMeetup = async (title, organizer, date, time, location) => {
 
 
 
-module.exports = { getMeetup, addParticipants, addMeetup, getMeetupById }
+
+module.exports = { getMeetup, addParticipants, addMeetup, getMeetupById, cancelMeetupPartake }
