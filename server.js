@@ -21,8 +21,7 @@ server.get("/", (req, res) => {
 
 server.use("/api/user", user) 
 server.use("/api/review", review)
-
-// server.use("/api/meetups", meetups)
+server.use("/api/meetups", meetups)
 
 let serverInstance;
 

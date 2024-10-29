@@ -32,6 +32,26 @@ const addParticipants = async (email, event) => {
     }
 }
 
+const addMeetup = async (title, organizer, date, time, location) => {
+    try {
+        const meetup = new Meetups({
+            title,
+            organizer,
+            date,
+            time,
+            location,
+        });
+        const isSuccess = await meetup.save()
+        if(!isSuccess){
+            return {success: false, msg: "Could not add meetup"}
+        }
+
+        return{ success: true, data: isSuccess}
+    } catch (error) {
+        return { success: false, msg: error}
+    }
+}
 
 
-module.exports = { getMeetup, addParticipants }
+
+module.exports = { getMeetup, addParticipants, addMeetup }

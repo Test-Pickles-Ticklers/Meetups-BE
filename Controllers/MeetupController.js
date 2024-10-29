@@ -1,6 +1,6 @@
 const { express, mongoose } = require("../config");
 const { Meetups } = require("../Model/MeetupsSchema");
-const { getMeetup, addParticipants } = require("../Services/MeetupServices");
+const { getMeetup, addParticipants, addMeetup } = require("../Services/MeetupServices");
 const auth = require("../Utils/auth");
 
 const meetup = express.Router();
@@ -23,17 +23,34 @@ meetup
       const user = req.user;
       const meetup = req.params.meetup;
       const meetExists = await getMeetup(meetup);
-      if (!meetExists) {
+      if (!meetExists.success) {
         return res.status(400).json({ msg: "Meetup doesn't exist" });
       }
 
       const addParticipant = await addParticipants(user, meetup);
-      if (!addParticipant) {
-        return res.status(400).json({ success: false });
+      if (!addParticipant.success) {
+        return res.status(400).json({ success: addParticipant.success, msg: addParticipant.msg });
       }
 
-      return res.status(200).json({ success: true, msg: "brabrabrabrba" });
+      return res.status(200).json({ success: addParticipant.success, data: addParticipant.data });
     } catch (error) {
       return res.status(500).json(error);
     }
-  });
+  })
+
+  .post("/add", auth, async (req, res) => {
+    try {
+        const {title, organizer, date, time, location} = req.body;
+        const meetup = await addMeetup(title, organizer, date, time, location);
+        if (!meetup.success) {
+            return res.status(400).json({ success: meetup.success, data: meetup.data });
+        }
+
+        return res.status(200).json();
+    } catch (error) {
+        return res.status(500).json(error)
+    }
+  })
+
+
+module.exports = { meetup }
