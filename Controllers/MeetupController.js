@@ -1,7 +1,6 @@
-const { get } = require("mongoose");
-const { express, mongoose } = require("../config");
+const { express } = require("../config");
 const { Meetups } = require("../Model/MeetupsSchema");
-const { getMeetup, getMeetupById, addParticipants, addMeetup } = require("../Services/MeetupServices");
+const { getMeetupById, addParticipants, addMeetup } = require("../Services/MeetupServices");
 const auth = require("../Utils/auth");
 
 const meetup = express.Router();
