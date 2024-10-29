@@ -1,6 +1,11 @@
 const { express } = require("../config");
 const { Meetups } = require("../Model/MeetupsSchema");
-const { getMeetupById, addParticipants, addMeetup } = require("../Services/MeetupServices");
+const {
+  getMeetupById,
+  addParticipants,
+  addMeetup,
+  cancelMeetupPartake,
+} = require("../Services/MeetupServices");
 const auth = require("../Utils/auth");
 
 const meetup = express.Router();
@@ -19,15 +24,19 @@ meetup
 
   .get("/meetup/:id", async (req, res) => {
     try {
-        const id = req.params.id;
-        const meetup = await getMeetupById(id);
-        if(!meetup.success){
-            return res.status(400).json({ success: meetup.success, msg: "Meetup doesn't exist"})
-        }
+      const id = req.params.id;
+      const meetup = await getMeetupById(id);
+      if (!meetup.success) {
+        return res
+          .status(400)
+          .json({ success: meetup.success, msg: "Meetup doesn't exist" });
+      }
 
-        return res.status(200).json({ success: meetup.success, data: meetup.data });
+      return res
+        .status(200)
+        .json({ success: meetup.success, data: meetup.data });
     } catch (error) {
-        return res.status(500).json(error);
+      return res.status(500).json(error);
     }
   })
 
@@ -43,34 +52,55 @@ meetup
       }
 
       const isValidlength = meetExists.data.participants.length;
-      if(isValidlength >=5) {
-        return res.status(400).json({success: false, msg: "No slots left"});
+      if (isValidlength >= 5) {
+        return res.status(400).json({ success: false, msg: "No slots left" });
       }
 
-      const addParticipant = await addParticipants(user.userEmail, meetup);
+      const addParticipant = await addParticipants(user.email, meetup);
       if (!addParticipant.success) {
-        return res.status(400).json({ success: addParticipant.success, msg: addParticipant.msg });
+        return res
+          .status(400)
+          .json({ success: addParticipant.success, msg: addParticipant.msg });
       }
 
-      return res.status(200).json({ success: addParticipant.success, data: addParticipant.data });
+      return res
+        .status(200)
+        .json({ success: addParticipant.success, data: addParticipant.data });
     } catch (error) {
       return res.status(500).json(error);
     }
   })
 
-  .post("/add", auth, async (req, res) => {
+  .put("/cancel/:id", auth, async (req, res) => {
     try {
-        const {title, organizer, date, time, location} = req.body;
-        const meetup = await addMeetup(title, organizer, date, time, location);
-        if (!meetup.success) {
-            return res.status(400).json({ success: meetup.success, msg: meetup.msg });
-        }
-
-        return res.status(200).json({success: meetup.success, data: meetup.data });
+      const user = req.user;
+      const id = req.params.id;
+      const meetup = await cancelMeetupPartake(id, user.email);
+      if (!meetup.success) {
+        return res.status(400).json({success: meetup.success, msg: meetup.msg });
+      }
+      return res.status(200).json({ success: meetup.success, data: meetup.data });
     } catch (error) {
         return res.status(500).json(error)
     }
   })
 
+  .post("/add", auth, async (req, res) => {
+    try {
+      const { title, organizer, date, time, location } = req.body;
+      const meetup = await addMeetup(title, organizer, date, time, location);
+      if (!meetup.success) {
+        return res
+          .status(400)
+          .json({ success: meetup.success, msg: meetup.msg });
+      }
 
-module.exports = { meetup }
+      return res
+        .status(200)
+        .json({ success: meetup.success, data: meetup.data });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  });
+
+module.exports = { meetup };
