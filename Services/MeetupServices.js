@@ -13,6 +13,19 @@ const getMeetup = async (event) => {
     }
 }
 
+const getMeetupById = async (id) => {
+    try {
+        const meetup = await Meetups.findById({_id: id})
+        if(!meetup){
+            return {success: false}
+        }
+
+        return {success: true, data: meetup}
+    } catch (error) {
+        return {success: false, msg: error}
+    }
+}
+
 
 const addParticipants = async (email, event) => {
     try {
@@ -54,4 +67,4 @@ const addMeetup = async (title, organizer, date, time, location) => {
 
 
 
-module.exports = { getMeetup, addParticipants, addMeetup }
+module.exports = { getMeetup, addParticipants, addMeetup, getMeetupById }
