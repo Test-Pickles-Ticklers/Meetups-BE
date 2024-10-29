@@ -45,7 +45,7 @@ const addMeetup = async (title, organizer, date, time, location) => {
         if(!isSuccess){
             return {success: false, msg: "Could not add meetup"}
         }
-
+        console.log(isSuccess)
         return{ success: true, data: isSuccess}
     } catch (error) {
         return { success: false, msg: error}

@@ -6,7 +6,7 @@ const {
   dev_url,
   express,
 } = require("./config");
-const { meetups } = require("./Controllers/MeetupController");
+const { meetup } = require("./Controllers/MeetupController");
 const { review } = require("./Controllers/ReviewController");
 const { user } = require("./Controllers/UserController");
 // const { auth } = require('./Utils/auth');
@@ -21,7 +21,7 @@ server.get("/", (req, res) => {
 
 server.use("/api/user", user) 
 server.use("/api/review", review)
-server.use("/api/meetups", meetups)
+server.use("/api/meetups", meetup)
 
 let serverInstance;
 

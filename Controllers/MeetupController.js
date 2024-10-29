@@ -27,7 +27,7 @@ meetup
         return res.status(400).json({ msg: "Meetup doesn't exist" });
       }
 
-      const addParticipant = await addParticipants(user, meetup);
+      const addParticipant = await addParticipants(user.userEmail, meetup);
       if (!addParticipant.success) {
         return res.status(400).json({ success: addParticipant.success, msg: addParticipant.msg });
       }
@@ -43,10 +43,10 @@ meetup
         const {title, organizer, date, time, location} = req.body;
         const meetup = await addMeetup(title, organizer, date, time, location);
         if (!meetup.success) {
-            return res.status(400).json({ success: meetup.success, data: meetup.data });
+            return res.status(400).json({ success: meetup.success, msg: meetup.msg });
         }
 
-        return res.status(200).json();
+        return res.status(200).json({success: meetup.success, data: meetup.data });
     } catch (error) {
         return res.status(500).json(error)
     }
