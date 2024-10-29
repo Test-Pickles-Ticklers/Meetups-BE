@@ -7,6 +7,7 @@ const {
   clientOptions,
   dev_url,
   express,
+  origin_url,
 } = require("./config");
 const { meetup } = require("./Controllers/MeetupController");
 const { review } = require("./Controllers/ReviewController");
@@ -16,7 +17,15 @@ const { user } = require("./Controllers/UserController");
 console.log(dev_port);
 console.log(dev_url);
 const server = express();
-server.use(cors()); //Enable CORS for all routes
+
+const corsOptions = {
+  origin: origin_url,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
+server.options("*", cors(corsOptions));
 
 server.get("/", (req, res) => {
   res.sendStatus(200);
