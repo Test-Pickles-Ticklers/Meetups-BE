@@ -23,7 +23,7 @@ const meetupsSchema = new mongoose.Schema({
     },
     participants: {
         type: Array,
-        required: false
+        required: false,
     }
 });
 
