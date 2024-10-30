@@ -48,7 +48,7 @@ review.get('/', auth, async (req, res) => {
 //Get one reviews
 review.get('/:reviewId', auth, async (req, res) => {
   try {
-    const reviews = await Review.findOne({});
+    const reviews = await Review.findById({ _id: req.params.reviewId });
     return res.status(200).json(reviews);
   } catch (error) {
     return res.status(500).json({ msg: 'Error retrieving meetups' });
