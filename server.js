@@ -25,6 +25,7 @@ const corsOptions = {
 };
 
 server.use(cors(corsOptions));
+server.use(express.json());
 
 server.get("/", (req, res) => {
   res.sendStatus(200);
