@@ -6,7 +6,7 @@ const {
   addMeetup,
   cancelMeetupPartake,
 } = require("../Services/MeetupServices");
-const auth = require("../Utils/auth");
+const auth = require("../Middlewares/auth");
 
 const meetup = express.Router();
 
