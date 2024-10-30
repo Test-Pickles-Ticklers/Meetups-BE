@@ -1,29 +1,22 @@
-const { Review } = require("../Model/ReviewSchema");
-const { Meetups } = require("../Model/MeetupsSchema");
 const { express } = require("../config");
-const auth = require("../Utils/auth");
 const review = express.Router();
+const {
+  postReview,
+  getReview,
+  getReviewList,
+} = require("../Services/ReviewService");
 
 // Post a review
-review.post("/:meetupId", auth, async (req, res) => {
+review.post("/:meetupsId", async (req, res) => {
   try {
     const { comment, rating } = req.body;
-    const { meetupId } = req.params;
+    const { meetupsId } = req.params;
+    const { email } = req.user;
 
-    const meetup = await Meetups.findById(meetupId);
+    const review = { comment, rating, email, meetupsId };
 
-    if (!meetup) {
-      return res.status(404).send({ error: "Meetup not found" });
-    }
+    const newReview = await postReview(review);
 
-    const newReview = new Review({
-      meetupsId: meetup._id,
-      reviewer: req.user.email,
-      comment,
-      rating,
-    });
-
-    await newReview.save();
     res.status(201).send(newReview);
   } catch (error) {
     console.error(error);
@@ -34,22 +27,27 @@ review.post("/:meetupId", auth, async (req, res) => {
 });
 
 //Get all reviews
-review.get("/", auth, async (req, res) => {
+review.get("/:meetupsId", async (req, res) => {
   try {
-    const reviews = await Review.find({});
+    const { meetupsId } = req.params;
+    const reviews = await getReviewList();
+
     return res.status(200).send(reviews);
   } catch (error) {
-    return res.status(500).send({ msg: "Error retrieving meetups" });
+    return res.status(500).send({ error: "Error retrieving meetups" });
   }
 });
 
 //Get one reviews
-review.get("/:reviewId", auth, async (req, res) => {
+review.get("/:meetupsId/:reviewId", async (req, res) => {
   try {
-    const reviews = await Review.findById({ _id: req.params.reviewId });
-    return res.status(200).send(reviews);
+    const { meetupsId, reviewId } = req.params;
+
+    const review = await getReview(meetupdsId, reviewId);
+
+    return res.status(200).send(review);
   } catch (error) {
-    return res.status(500).send({ msg: "Error retrieving meetups" });
+    return res.status(error.status).send({ error: error.message });
   }
 });
 

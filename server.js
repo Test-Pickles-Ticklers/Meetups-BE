@@ -1,5 +1,5 @@
 const cors = require("cors");
-
+const auth = require("./Middlewares/auth");
 const {
   dev_port,
   mongoose,
@@ -32,7 +32,7 @@ server.get("/", (req, res) => {
 });
 
 server.use("/api/user", user);
-server.use("/api/review", review);
+server.use("/api/review", auth, review);
 server.use("/api/meetups", meetup);
 
 let serverInstance;
