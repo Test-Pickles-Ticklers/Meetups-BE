@@ -11,6 +11,31 @@ const auth = require("../Middlewares/auth");
 const meetup = express.Router();
 
 meetup
+  .post("/", auth, async (req, res) => {
+    try {
+      const { email } = req.user;
+      const { title, date, time, location, maxParticipants } = req.body;
+
+      const newMeetup = {
+        title,
+        organizer: email,
+        date,
+        time,
+        location,
+        maxParticipants,
+      };
+
+      console.log("newMeetup", newMeetup);
+      const meetup = await addMeetup(newMeetup);
+      if (!meetup.success) {
+        return res.status(400).send({ error: meetup.msg });
+      }
+
+      return res.status(200).send(meetup.data);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
+  })
   .get("/", async (req, res) => {
     try {
       const meetups = await Meetups.find();
@@ -69,20 +94,6 @@ meetup
       if (!meetup.success) {
         return res.status(400).send({ error: meetup.msg });
       }
-      return res.status(200).send(meetup.data);
-    } catch (error) {
-      return res.status(500).send(error);
-    }
-  })
-
-  .post("/add", auth, async (req, res) => {
-    try {
-      const { title, organizer, date, time, location } = req.body;
-      const meetup = await addMeetup(title, organizer, date, time, location);
-      if (!meetup.success) {
-        return res.status(400).send({ error: meetup.msg });
-      }
-
       return res.status(200).send(meetup.data);
     } catch (error) {
       return res.status(500).send(error);
