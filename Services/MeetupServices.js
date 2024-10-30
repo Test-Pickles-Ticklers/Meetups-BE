@@ -85,15 +85,10 @@ const cancelMeetupPartake = async (id, user) => {
   }
 };
 
-const addMeetup = async (title, organizer, date, time, location) => {
+const addMeetup = async (newMeetup) => {
   try {
-    const meetup = new Meetups({
-      title,
-      organizer,
-      date,
-      time,
-      location,
-    });
+    const meetup = new Meetups(newMeetup);
+    console.log("meetup in service", meetup);
     const isSuccess = await meetup.save();
     if (!isSuccess) {
       return { success: false, msg: "Could not add meetup" };

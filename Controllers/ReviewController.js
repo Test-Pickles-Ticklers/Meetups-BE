@@ -30,7 +30,7 @@ review.post("/:meetupsId", async (req, res) => {
 review.get("/:meetupsId", async (req, res) => {
   try {
     const { meetupsId } = req.params;
-    const reviews = await getReviewList();
+    const reviews = await getReviewList(meetupsId);
 
     return res.status(200).send(reviews);
   } catch (error) {
@@ -43,7 +43,7 @@ review.get("/:meetupsId/:reviewId", async (req, res) => {
   try {
     const { meetupsId, reviewId } = req.params;
 
-    const review = await getReview(meetupdsId, reviewId);
+    const review = await getReview(meetupsId, reviewId);
 
     return res.status(200).send(review);
   } catch (error) {
