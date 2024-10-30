@@ -1,6 +1,7 @@
 const { express } = require("../config");
 const user = express.Router();
 const auth = require("../Middlewares/auth");
+const { getAllReviewsByUser } = require("../Services/ReviewService");
 const {
   getParticipation,
   loginUser,
@@ -33,6 +34,17 @@ user.get("/meetups", auth, async (req, res) => {
   try {
     const { email } = req.user;
     const data = await getParticipation(email);
+
+    res.status(200).send(data);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
+
+user.get("/reviews", auth, async (req, res) => {
+  try {
+    const { email } = req.user;
+    const data = await getAllReviewsByUser(email);
 
     res.status(200).send(data);
   } catch (error) {

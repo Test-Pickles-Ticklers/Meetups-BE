@@ -44,8 +44,18 @@ const getReview = async (meetupdsId, reviewId) => {
   }
 };
 
+const getAllReviewsByUser = async (reviewer) => {
+  try {
+    const reviews = await Review.find({ reviewer });
+    return reviews;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   postReview,
   getReview,
   getReviewList,
+  getAllReviewsByUser,
 };
