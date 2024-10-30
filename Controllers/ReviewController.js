@@ -6,6 +6,7 @@ const review = express.Router();
 
 review.use(express.json());
 
+// Post a review
 review.post('/:meetupId', auth, async (req, res) => {
   try {
     const { comment, rating } = req.body;
@@ -31,6 +32,26 @@ review.post('/:meetupId', auth, async (req, res) => {
     res
       .status(400)
       .json({ error: 'An error occurred while saving the review' });
+  }
+});
+
+//Get all reviews
+review.get('/', auth, async (req, res) => {
+  try {
+    const reviews = await Review.find({});
+    return res.status(200).json(reviews);
+  } catch (error) {
+    return res.status(500).json({ msg: 'Error retrieving meetups' });
+  }
+});
+
+//Get one reviews
+review.get('/:reviewId', auth, async (req, res) => {
+  try {
+    const reviews = await Review.findOne({});
+    return res.status(200).json(reviews);
+  } catch (error) {
+    return res.status(500).json({ msg: 'Error retrieving meetups' });
   }
 });
 
