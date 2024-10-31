@@ -24,7 +24,7 @@ user.post("/login", async (req, res) => {
     const { email, password } = req.body;
     const token = await loginUser(email, password);
 
-    res.status(200).send({ token });
+    res.status(200).send({ token, email });
   } catch (error) {
     res.status(error.status).send({ error: error.message });
   }
