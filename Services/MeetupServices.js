@@ -1,6 +1,16 @@
 const { Meetups } = require("../Model/MeetupsSchema");
 const { User } = require("../Model/UserSchema");
 
+const getMeetupList = async () => {
+  try {
+    const meetups = await Meetups.find().sort({ date: 1, time: 1 });
+
+    return meetups;
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+
 const getMeetup = async (event) => {
   try {
     const meetup = await Meetups.findOne({ title: event });
@@ -114,4 +124,5 @@ module.exports = {
   getMeetupById,
   cancelMeetupPartake,
   deleteMeetup,
+  getMeetupList,
 };
