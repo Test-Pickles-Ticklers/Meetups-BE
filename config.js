@@ -1,10 +1,5 @@
 require("dotenv").config();
-const crossEnv = require("cross-env");
 const express = require("express");
-
-console.log("PROCCESS", process.env.DEV_URI);
-console.log("PROCCESS", process.env.DEV_URL);
-console.log("PROCCESS", process.env.DEV_PORT);
 
 const mongoose = require("mongoose");
 

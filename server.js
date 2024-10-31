@@ -15,8 +15,6 @@ const { user } = require("./Controllers/UserController");
 
 const server = express();
 
-console.log("origin_url", origin_url);
-
 const corsOptions = {
   origin: origin_url,
   methods: ["GET", "POST", "PUT", "DELETE"],

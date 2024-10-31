@@ -62,7 +62,6 @@ meetup
   .delete("/:id", async (req, res) => {
     try {
       const id = req.params.id;
-      console.log("id in delete", id);
       const meetup = await deleteMeetup(id);
       if (!meetup) {
         return res.status(400).send({ error: "Meetup doesn't exist" });
