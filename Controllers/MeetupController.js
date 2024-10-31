@@ -6,12 +6,21 @@ const {
   addMeetup,
   cancelMeetupPartake,
   deleteMeetup,
+  getMeetupList,
 } = require("../Services/MeetupServices");
 const auth = require("../Middlewares/auth");
 
 const meetup = express.Router();
 
 meetup
+  .get("/", async (req, res) => {
+    try {
+      const meetups = await getMeetupList();
+      return res.status(200).send(meetups);
+    } catch (error) {
+      return res.status(500).send({ error: "Error retrieving meetups" });
+    }
+  })
   .post("/", auth, async (req, res) => {
     try {
       const { email } = req.user;
@@ -34,14 +43,6 @@ meetup
       return res.status(200).send(meetup.data);
     } catch (error) {
       return res.status(500).send(error);
-    }
-  })
-  .get("/", async (req, res) => {
-    try {
-      const meetups = await Meetups.find();
-      return res.status(200).send(meetups);
-    } catch (error) {
-      return res.status(500).send({ error: "Error retrieving meetups" });
     }
   })
 
