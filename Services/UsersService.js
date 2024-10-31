@@ -2,14 +2,17 @@ const { User } = require("../Model/UserSchema");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { dev_secret } = require("../config");
+const { Meetups } = require("../Model/MeetupsSchema");
 
 const getParticipation = async (email) => {
   try {
-    const user = User.findOne({ email: email }).populate("meetupParticipation");
+    const user = await User.findOne({ email: email })
+      .populate("meetupParticipation")
+      .exec();
 
     if (!user) return { success: false, error: "Could not find user" };
-
-    return { data: user.meetupParticipation || [] };
+    const { meetupParticipation } = user;
+    return meetupParticipation;
   } catch (error) {
     throw error;
   }
@@ -57,4 +60,16 @@ const loginUser = async (email, password) => {
   }
 };
 
-module.exports = { getParticipation, registerUser, loginUser };
+const getOwnMeetups = async (email) => {
+  try {
+    const meetups = await Meetups.find({ organizer: email });
+
+    if (!meetups) return { success: false, error: "Could not find meetups" };
+
+    return meetups;
+  } catch (error) {
+    throw error;
+  }
+};
+
+module.exports = { getParticipation, registerUser, loginUser, getOwnMeetups };

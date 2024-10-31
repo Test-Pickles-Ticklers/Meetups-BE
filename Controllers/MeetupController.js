@@ -5,6 +5,7 @@ const {
   addParticipants,
   addMeetup,
   cancelMeetupPartake,
+  deleteMeetup,
 } = require("../Services/MeetupServices");
 const auth = require("../Middlewares/auth");
 
@@ -25,7 +26,6 @@ meetup
         maxParticipants,
       };
 
-      console.log("newMeetup", newMeetup);
       const meetup = await addMeetup(newMeetup);
       if (!meetup.success) {
         return res.status(400).send({ error: meetup.msg });
@@ -54,6 +54,21 @@ meetup
       }
 
       return res.status(200).send(meetup.data);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
+  })
+
+  .delete("/:id", async (req, res) => {
+    try {
+      const id = req.params.id;
+      console.log("id in delete", id);
+      const meetup = await deleteMeetup(id);
+      if (!meetup) {
+        return res.status(400).send({ error: "Meetup doesn't exist" });
+      }
+
+      return res.status(200).send(true);
     } catch (error) {
       return res.status(500).send(error);
     }

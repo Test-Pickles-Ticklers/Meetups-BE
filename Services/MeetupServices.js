@@ -1,5 +1,5 @@
-const { Meetups } = require('../Model/MeetupsSchema');
-const { User } = require('../Model/UserSchema');
+const { Meetups } = require("../Model/MeetupsSchema");
+const { User } = require("../Model/UserSchema");
 
 const getMeetup = async (event) => {
   try {
@@ -36,7 +36,7 @@ const addParticipants = async (email, eventId) => {
       { new: true }
     );
 
-    if (!meetup) return { success: false, msg: 'Meetup not found' };
+    if (!meetup) return { success: false, msg: "Meetup not found" };
 
     const user = await User.findOneAndUpdate(
       { email: email },
@@ -44,7 +44,7 @@ const addParticipants = async (email, eventId) => {
       { new: true }
     );
 
-    if (!user) return { success: false, msg: 'User not found' };
+    if (!user) return { success: false, msg: "User not found" };
 
     return { success: true, data: meetup };
   } catch (error) {
@@ -57,13 +57,13 @@ const cancelMeetupPartake = async (id, user) => {
     const participant = user;
     const meetup = await Meetups.findById(id);
     if (!meetup) {
-      return { success: false, msg: 'meetup not found' };
+      return { success: false, msg: "meetup not found" };
     }
 
     if (!meetup.participants.includes(participant)) {
       return {
         success: false,
-        msg: 'You are not a participant of this meetup',
+        msg: "You are not a participant of this meetup",
       };
     }
 
@@ -88,15 +88,24 @@ const cancelMeetupPartake = async (id, user) => {
 const addMeetup = async (newMeetup) => {
   try {
     const meetup = new Meetups(newMeetup);
-    console.log('meetup in service', meetup);
+    console.log("meetup in service", meetup);
     const isSuccess = await meetup.save();
     if (!isSuccess) {
-      return { success: false, msg: 'Could not add meetup' };
+      return { success: false, msg: "Could not add meetup" };
     }
     console.log(isSuccess);
     return { success: true, data: isSuccess };
   } catch (error) {
     return { success: false, msg: error };
+  }
+};
+
+const deleteMeetup = async (id) => {
+  try {
+    const meetup = await Meetups.findByIdAndDelete(id);
+    return true;
+  } catch (error) {
+    return { success: false, error: error.message };
   }
 };
 
@@ -106,4 +115,5 @@ module.exports = {
   addMeetup,
   getMeetupById,
   cancelMeetupPartake,
+  deleteMeetup,
 };
