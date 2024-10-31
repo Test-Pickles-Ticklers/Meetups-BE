@@ -13,16 +13,11 @@ review.post("/:meetupsId", async (req, res) => {
     const { meetupsId } = req.params;
     const { email } = req.user;
 
-    const review = { comment, rating, email, meetupsId };
-
+    const review = { comment, rating, reviewer: email, meetupsId };
     const newReview = await postReview(review);
-
     res.status(201).send(newReview);
   } catch (error) {
-    console.error(error);
-    res
-      .status(400)
-      .send({ error: "An error occurred while saving the review" });
+    res.status(400).send({ error: error.message });
   }
 });
 

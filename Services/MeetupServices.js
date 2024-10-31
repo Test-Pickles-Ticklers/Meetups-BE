@@ -1,6 +1,16 @@
 const { Meetups } = require("../Model/MeetupsSchema");
 const { User } = require("../Model/UserSchema");
 
+const getMeetupList = async () => {
+  try {
+    const meetups = await Meetups.find().sort({ date: 1, time: 1 });
+
+    return meetups;
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+
 const getMeetup = async (event) => {
   try {
     const meetup = await Meetups.findOne({ title: event });
@@ -88,12 +98,10 @@ const cancelMeetupPartake = async (id, user) => {
 const addMeetup = async (newMeetup) => {
   try {
     const meetup = new Meetups(newMeetup);
-    console.log("meetup in service", meetup);
     const isSuccess = await meetup.save();
     if (!isSuccess) {
       return { success: false, msg: "Could not add meetup" };
     }
-    console.log(isSuccess);
     return { success: true, data: isSuccess };
   } catch (error) {
     return { success: false, msg: error };
@@ -132,4 +140,6 @@ module.exports = {
   cancelMeetupPartake,
   deleteMeetup,
   updateMeetupById,
+  getMeetupList,
+
 };

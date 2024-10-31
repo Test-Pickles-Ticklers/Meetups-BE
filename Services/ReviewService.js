@@ -9,6 +9,15 @@ const postReview = async (review) => {
       return res.status(404).send({ error: "Meetup not found" });
     }
 
+    const existingReview = await Review.findOne({
+      reviewer: review.reviewer,
+      meetupsId: review.meetupsId,
+    });
+
+    if (existingReview) {
+      throw new Error("Du har redan lagt en review på denna.");
+    }
+
     const newReview = new Review(review);
 
     await newReview.save();
