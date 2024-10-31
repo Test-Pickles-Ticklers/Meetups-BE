@@ -6,7 +6,9 @@ const {
   addMeetup,
   cancelMeetupPartake,
   deleteMeetup,
+  updateMeetupById,
   getMeetupList,
+
 } = require("../Services/MeetupServices");
 const auth = require("../Middlewares/auth");
 
@@ -121,17 +123,16 @@ meetup
       const id = req.params.id;
       const updatedMeetupData = req.body;
 
-      const updatedMeetup = await Meetups.findByIdAndUpdate(
-        id,
-        updatedMeetupData,
-        { new: true }
-      );
+      const result = await updateMeetupById(id, updatedMeetupData);
 
-      if (!updatedMeetup) {
-        return res.status(404).send({ error: "Meetup not found" });
+
+      if (!result.success) {
+        return res
+          .status(404)
+          .send({ error: result.msg || 'Meetup not found' });
       }
 
-      return res.status(200).send(updatedMeetup);
+      return res.status(200).send(result.data);
     } catch (error) {
       return res.status(500).send(error);
     }
