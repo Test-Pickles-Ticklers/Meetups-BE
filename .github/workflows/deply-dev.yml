@@ -1,4 +1,4 @@
-name: Deploy to Render (PROD)
+name: Deploy to Render (DEV)
 
 on:
   push:
