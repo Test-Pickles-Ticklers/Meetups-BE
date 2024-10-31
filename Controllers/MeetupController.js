@@ -77,6 +77,26 @@ meetup
     }
   })
 
+  .put("/:id", auth, async (req, res) => {
+    try {
+      const id = req.params.id;
+      const updatedMeetupData = req.body;
+
+      const result = await updateMeetupById(id, updatedMeetupData);
+
+
+      if (!result.success) {
+        return res
+          .status(404)
+          .send({ error: result.msg || 'Meetup not found' });
+      }
+
+      return res.status(200).send(result.data);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
+  })
+
   .put("/:id/participate", auth, async (req, res) => {
     try {
       const user = req.user;
@@ -92,12 +112,12 @@ meetup
       if (isFull) {
         return res.status(400).send({ error: "No slots left" });
       }
-
+      
       const addParticipant = await addParticipants(user.email, meetup);
       if (!addParticipant.success) {
         return res.status(400).send({ error: addParticipant.msg });
       }
-
+      
       return res.status(200).send(addParticipant.data);
     } catch (error) {
       return res.status(500).send(error);
@@ -118,24 +138,5 @@ meetup
     }
   })
 
-  .put("/:id/change", auth, async (req, res) => {
-    try {
-      const id = req.params.id;
-      const updatedMeetupData = req.body;
-
-      const result = await updateMeetupById(id, updatedMeetupData);
-
-
-      if (!result.success) {
-        return res
-          .status(404)
-          .send({ error: result.msg || 'Meetup not found' });
-      }
-
-      return res.status(200).send(result.data);
-    } catch (error) {
-      return res.status(500).send(error);
-    }
-  });
 
 module.exports = { meetup };
