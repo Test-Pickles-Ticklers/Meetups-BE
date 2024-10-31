@@ -109,6 +109,21 @@ const deleteMeetup = async (id) => {
   }
 };
 
+const updateMeetupById = async (id, updatedData) => {
+  try {
+    const updatedMeetup = await Meetups.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+    if (!updatedMeetup) {
+      return { success: false, msg: 'Meetup not found' };
+    }
+
+    return { success: true, data: updatedMeetup };
+  } catch (error) {
+    return { success: false, msg: error };
+  }
+};
+
 module.exports = {
   getMeetup,
   addParticipants,
@@ -116,4 +131,5 @@ module.exports = {
   getMeetupById,
   cancelMeetupPartake,
   deleteMeetup,
+  updateMeetupById,
 };
