@@ -112,6 +112,27 @@ meetup
     } catch (error) {
       return res.status(500).send(error);
     }
+  })
+
+  .put("/:id/change", auth, async (req, res) => {
+    try {
+      const id = req.params.id;
+      const updatedMeetupData = req.body;
+
+      const updatedMeetup = await Meetups.findByIdAndUpdate(
+        id,
+        updatedMeetupData,
+        { new: true }
+      );
+
+      if (!updatedMeetup) {
+        return res.status(404).send({ error: "Meetup not found" });
+      }
+
+      return res.status(200).send(updatedMeetup);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
   });
 
 module.exports = { meetup };
