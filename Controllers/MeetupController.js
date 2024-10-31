@@ -24,7 +24,7 @@ meetup
   .post("/", auth, async (req, res) => {
     try {
       const { email } = req.user;
-      const { title, date, time, location, maxParticipants } = req.body;
+      const { title, date, time, location, maxParticipants, category } = req.body;
 
       const newMeetup = {
         title,
@@ -33,6 +33,7 @@ meetup
         time,
         location,
         maxParticipants,
+        category,
       };
 
       const meetup = await addMeetup(newMeetup);
