@@ -1,12 +1,12 @@
-const { Review } = require("../Model/ReviewSchema");
-const { Meetups } = require("../Model/MeetupsSchema");
+const { Review } = require('../Model/ReviewSchema');
+const { Meetups } = require('../Model/MeetupsSchema');
 
 const postReview = async (review) => {
   try {
     const meetup = await Meetups.findById(review.meetupsId);
 
     if (!meetup) {
-      return res.status(404).send({ error: "Meetup not found" });
+      return res.status(404).send({ error: 'Meetup not found' });
     }
 
     const existingReview = await Review.findOne({
@@ -15,7 +15,7 @@ const postReview = async (review) => {
     });
 
     if (existingReview) {
-      throw new Error("Du har redan lagt en review på denna.");
+      throw new Error('Du har redan lagt en review på denna.');
     }
 
     const newReview = new Review(review);
@@ -42,7 +42,7 @@ const getReview = async (meetupdsId, reviewId) => {
     const review = await Review.findOne({ _id: reviewId, meetupdsId });
 
     if (!review) {
-      const error = new Error("Review not found");
+      const error = new Error('Review not found');
       error.status = 404;
       throw error;
     }

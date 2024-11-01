@@ -1,5 +1,3 @@
-const { express } = require("../config");
-const { Meetups } = require("../Model/MeetupsSchema");
 const {
   getMeetupById,
   addParticipants,
@@ -8,25 +6,33 @@ const {
   deleteMeetup,
   updateMeetupById,
   getMeetupList,
-
-} = require("../Services/MeetupServices");
-const auth = require("../Middlewares/auth");
+} = require('../Services/MeetupServices');
+const auth = require('../Middlewares/auth');
+const { express } = require('../config');
 
 const meetup = express.Router();
 
 meetup
-  .get("/", async (req, res) => {
+  .get('/', async (req, res) => {
     try {
       const meetups = await getMeetupList();
       return res.status(200).send(meetups);
     } catch (error) {
-      return res.status(500).send({ error: "Error retrieving meetups" });
+      return res.status(500).send({ error: 'Error retrieving meetups' });
     }
   })
-  .post("/", auth, async (req, res) => {
+  .post('/', auth, async (req, res) => {
     try {
       const { email } = req.user;
-      const { title, date, time, location, maxParticipants, category, description } = req.body;
+      const {
+        title,
+        date,
+        time,
+        location,
+        maxParticipants,
+        category,
+        description,
+      } = req.body;
 
       const newMeetup = {
         title,
@@ -50,7 +56,7 @@ meetup
     }
   })
 
-  .get("/:id", async (req, res) => {
+  .get('/:id', async (req, res) => {
     try {
       const id = req.params.id;
       const meetup = await getMeetupById(id);
@@ -64,7 +70,7 @@ meetup
     }
   })
 
-  .delete("/:id", async (req, res) => {
+  .delete('/:id', async (req, res) => {
     try {
       const id = req.params.id;
       const meetup = await deleteMeetup(id);
@@ -78,13 +84,12 @@ meetup
     }
   })
 
-  .put("/:id", auth, async (req, res) => {
+  .put('/:id', auth, async (req, res) => {
     try {
       const id = req.params.id;
       const updatedMeetupData = req.body;
 
       const result = await updateMeetupById(id, updatedMeetupData);
-
 
       if (!result.success) {
         return res
@@ -98,7 +103,7 @@ meetup
     }
   })
 
-  .put("/:id/participate", auth, async (req, res) => {
+  .put('/:id/participate', auth, async (req, res) => {
     try {
       const user = req.user;
       const meetup = req.params.id;
@@ -111,21 +116,21 @@ meetup
       const isValidlength = meetExists.data.participants.length;
       const isFull = isValidlength >= meetExists.data.maxParticipants;
       if (isFull) {
-        return res.status(400).send({ error: "No slots left" });
+        return res.status(400).send({ error: 'No slots left' });
       }
-      
+
       const addParticipant = await addParticipants(user.email, meetup);
       if (!addParticipant.success) {
         return res.status(400).send({ error: addParticipant.msg });
       }
-      
+
       return res.status(200).send(addParticipant.data);
     } catch (error) {
       return res.status(500).send(error);
     }
   })
 
-  .put("/:id/cancel", auth, async (req, res) => {
+  .put('/:id/cancel', auth, async (req, res) => {
     try {
       const user = req.user;
       const id = req.params.id;
@@ -137,7 +142,6 @@ meetup
     } catch (error) {
       return res.status(500).send(error);
     }
-  })
-
+  });
 
 module.exports = { meetup };
