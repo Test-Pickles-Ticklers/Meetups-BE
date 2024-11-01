@@ -40,6 +40,8 @@ let serverInstance;
 
 const startServer = async () => {
   try {
+    console.log('MongoDB URI:', dev_uri);
+
     await mongoose.connect(dev_uri, clientOptions);
     console.log('Connected to MongoDb');
 

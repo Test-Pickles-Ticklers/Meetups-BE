@@ -1,11 +1,11 @@
-require("dotenv").config();
-const express = require("express");
+require('dotenv').config();
+const express = require('express');
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const clientOptions = {
   serverApi: {
-    version: "1",
+    version: '1',
     strict: true,
     deprecationErrors: true,
     useNewUrlParser: true,
@@ -15,7 +15,7 @@ const clientOptions = {
 };
 
 module.exports = {
-  dev_uri: process.env.DEV_URI,
+  dev_uri: process.env.DEV_URI || 'https://127.0.0.1:5000',
   dev_url: process.env.DEV_URL,
   dev_port: process.env.DEV_PORT,
   dev_secret: process.env.DEV_SECRET,
