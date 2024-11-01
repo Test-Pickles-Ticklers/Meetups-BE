@@ -1,4 +1,4 @@
-const { mongoose } = require("../config");
+const { mongoose } = require('../config');
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -17,4 +17,4 @@ const reviewSchema = new mongoose.Schema(
 
 const Review = mongoose.model('Review', reviewSchema);
 
-module.exports = {Review};
+module.exports = { Review };

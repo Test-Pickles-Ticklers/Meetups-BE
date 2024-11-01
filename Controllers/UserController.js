@@ -1,16 +1,17 @@
-const { express } = require("../config");
-const user = express.Router();
-const auth = require("../Middlewares/auth");
-const { getAllReviewsByUser } = require("../Services/ReviewService");
+const auth = require('../Middlewares/auth');
+const { getAllReviewsByUser } = require('../Services/ReviewService');
 const {
   getParticipation,
   loginUser,
   registerUser,
   getOwnMeetups,
-} = require("../Services/UsersService");
+} = require('../Services/UsersService');
+const { express } = require('../config');
+
+const user = express.Router();
 
 user
-  .post("/signup", async (req, res) => {
+  .post('/signup', async (req, res) => {
     try {
       const { email, password } = req.body;
       const user = await registerUser(email, password);
@@ -21,7 +22,7 @@ user
     }
   })
 
-  .post("/login", async (req, res) => {
+  .post('/login', async (req, res) => {
     try {
       const { email, password } = req.body;
       const token = await loginUser(email, password);
@@ -32,7 +33,7 @@ user
     }
   })
 
-  .get("/meetups", auth, async (req, res) => {
+  .get('/meetups', auth, async (req, res) => {
     try {
       const { email } = req.user;
       const data = await getParticipation(email);
@@ -43,7 +44,7 @@ user
     }
   })
 
-  .get("/reviews", auth, async (req, res) => {
+  .get('/reviews', auth, async (req, res) => {
     try {
       const { email } = req.user;
       const data = await getAllReviewsByUser(email);
@@ -54,7 +55,7 @@ user
     }
   })
 
-  .get("/organizedMeetups", auth, async (req, res) => {
+  .get('/organizedMeetups', auth, async (req, res) => {
     try {
       const { email } = req.user;
       const data = await getOwnMeetups(email);
