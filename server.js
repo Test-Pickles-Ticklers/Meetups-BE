@@ -40,7 +40,7 @@ let serverInstance;
 
 const startServer = async () => {
   try {
-    // remove log later
+    // remove log later = "MongoDB URI: undefined"
     console.log('MongoDB URI:', dev_uri);
 
     await mongoose.connect(dev_uri, clientOptions);
