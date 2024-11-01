@@ -9,9 +9,7 @@ const {
   express,
   origin_url,
 } = require('./config');
-// Nytt
-const DEV_URI = require('dotenv').config({ path: '.env' });
-// Nytt ovan
+
 const { meetup } = require('./Controllers/MeetupController');
 const { review } = require('./Controllers/ReviewController');
 const { user } = require('./Controllers/UserController');
@@ -40,7 +38,7 @@ let serverInstance;
 
 const startServer = async () => {
   try {
-    await mongoose.connect(DEV_URI, clientOptions);
+    await mongoose.connect(dev_uri, clientOptions);
     console.log('Connected to MongoDb');
 
     serverInstance = server.listen(dev_port, () => {
