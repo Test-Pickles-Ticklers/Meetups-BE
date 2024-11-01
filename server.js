@@ -9,6 +9,7 @@ const {
   express,
   origin_url,
 } = require('./config');
+require('dotenv').config();
 
 const { meetup } = require('./Controllers/MeetupController');
 const { review } = require('./Controllers/ReviewController');
