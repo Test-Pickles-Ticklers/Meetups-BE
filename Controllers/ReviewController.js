@@ -1,37 +1,48 @@
-const { Review } = require('../Model/ReviewSchema');
-const { Meetups } = require('../Model/MeetupsSchema');
+const {
+  postReview,
+  getReview,
+  getReviewList,
+} = require('../Services/ReviewService');
 const { express } = require('../config');
-const auth = require('../Utils/auth');
+
 const review = express.Router();
 
-review.use(express.json());
+review
+  .post('/:meetupsId', async (req, res) => {
+    try {
+      const { comment, rating } = req.body;
+      const { meetupsId } = req.params;
+      const { email } = req.user;
 
-review.post('/:meetupId', auth, async (req, res) => {
-  try {
-    const { comment, rating } = req.body;
-    const { meetupId } = req.params;
-
-    const meetup = await Meetups.findById(meetupId);
-
-    if (!meetup) {
-      return res.status(404).json({ error: 'Meetup not found' });
+      const review = { comment, rating, reviewer: email, meetupsId };
+      const newReview = await postReview(review);
+      res.status(201).send(newReview);
+    } catch (error) {
+      res.status(400).send({ error: error.message });
     }
+  })
 
-    const newReview = new Review({
-      meetupsId: meetup._id,
-      reviewer: req.user.email,
-      comment,
-      rating,
-    });
+  .get('/:meetupsId', async (req, res) => {
+    try {
+      const { meetupsId } = req.params;
+      const reviews = await getReviewList(meetupsId);
 
-    await newReview.save();
-    res.status(201).json({ review: newReview });
-  } catch (error) {
-    console.error(error);
-    res
-      .status(400)
-      .json({ error: 'An error occurred while saving the review' });
-  }
-});
+      return res.status(200).send(reviews);
+    } catch (error) {
+      return res.status(500).send({ error: 'Error retrieving meetups' });
+    }
+  })
+
+  .get('/:meetupsId/:reviewId', async (req, res) => {
+    try {
+      const { meetupsId, reviewId } = req.params;
+
+      const review = await getReview(meetupsId, reviewId);
+
+      return res.status(200).send(review);
+    } catch (error) {
+      return res.status(error.status).send({ error: error.message });
+    }
+  });
 
 module.exports = { review };
