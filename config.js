@@ -15,7 +15,7 @@ const clientOptions = {
 };
 
 module.exports = {
-  dev_uri: process.env.DEV_URI || 'mongo+srv//https://127.0.0.1:5000',
+  dev_uri: process.env.DEV_URI || 'mongodb+srv//https://127.0.0.1:5000',
   dev_url: process.env.DEV_URL,
   dev_port: process.env.DEV_PORT,
   dev_secret: process.env.DEV_SECRET,
