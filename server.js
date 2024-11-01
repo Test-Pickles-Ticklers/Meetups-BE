@@ -40,6 +40,7 @@ let serverInstance;
 
 const startServer = async () => {
   try {
+    // remove log later
     console.log('MongoDB URI:', dev_uri);
 
     await mongoose.connect(dev_uri, clientOptions);
